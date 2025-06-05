@@ -1,11 +1,19 @@
-import express from 'express'
+import express from "express";
 import userModel from "../models/userModel.js";
 
-const userRouter = express.Router()
+const userRouter = express.Router();
+userRouter.get("/", async (req, res) => {
+  const user = await userModel.find();
+  res.json(user);
+});
 
 userRouter.post("/register", async (req, res) => {
   const { name, email, pass } = req.body;
-  const result = await userModel.insertOne({ name: name, email: email, pass: pass });
+  const result = await userModel.create({
+    name: name,
+    email: email,
+    pass: pass,
+  });
   return res.json(result);
 });
 
@@ -15,8 +23,18 @@ userRouter.post("/login", async (req, res) => {
   if (!result) return res.json({ message: "Invalid user or password" });
   return res.json(result);
 });
-userRouter.get("/:id/name",async(req,res)=>{
-    const email=req.params.is;
-    const result=await userModel.findOne({email},{_id:0,name:1});
+
+userRouter.get("/:id", async (req, res) => {
+  const email = req.params.id;
+  const result = await userModel.findOne({ email });
+  return res.json(result);
 });
-export default userRouter
+
+userRouter.get("/:id/name", async (req, res) => {
+  const email = req.params.id;
+  const result = await userModel.findOne({ email },{_id:0,name:1});
+  return res.json(result);
+});
+
+
+export default userRouter;
