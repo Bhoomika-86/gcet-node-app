@@ -18,6 +18,10 @@ const MONGO_URI = `mongodb+srv://${DBUSER}:${DBPASS}@cluster0.cnvkhzx.mongodb.ne
 
 
 //const MONGO_URI = process.env.MONGO_URI;
+app.get("/",(req,res)=>
+{
+  res.send("API is running");
+});
 
 app.use("/users", userRouter);
 app.use("/products", productRouter);
